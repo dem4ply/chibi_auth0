@@ -38,6 +38,6 @@ setup(
     name='chibi_auth0',
     packages=find_packages(include=['chibi_auth0', 'chibi_auth0.*']),
     url='https://github.com/dem4ply/chibi_auth0',
-    version='0.0.1',
+    version='0.1.0',
     zip_safe=False,
 )
