@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from chibi_auth0.urls import well_know, user, auth_token
+from chibi_auth0.urls import well_know, user, auth_token, user_info
 from chibi_requests.auth import Bearer
 
 
@@ -39,6 +39,12 @@ class Chibi_auth0:
         response = self.auth_token.post( json=params )
         return response.native
 
+    def user_info( self, access_token, token_type='Bearer' ):
+        url = user_info.format( domain=self.domain )
+        url.headers[ 'Authorization' ] = f"{token_type} {access_token}"
+        response = url.get()
+        return response.native
+
     @property
     def client_auth_token( self ):
         try:
@@ -52,6 +58,10 @@ class Chibi_auth0:
                 "grant_type": "client_credentials",
             }
             response = self.auth_token.post( json=params )
+            if not response.ok:
+                raise NotImplementedError(
+                    f"params\n{params}headers\n{response.headers}\n"
+                    f"content\n{response.content}" )
             self._client_auth_token = Bearer(
                 token=response.native.access_token )
             return self._client_auth_token
